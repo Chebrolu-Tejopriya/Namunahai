@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+
+  /* Brand palette */
+  --color-cream: #f6f4ec;
+  --color-cream-deep: #f0ede2;
+  --color-ink: #18181b;
+  --color-ink-soft: #0f0f0f;
+  --color-muted: #656565;
+  --color-muted-2: #7c7c78;
+  --color-line: #e6e3d8;
+  --color-line-soft: #ece9df;
+  --color-dark: #0b0c0e;
+  --color-dark-2: #111317;
+
+  --radius-card: 20px;
+}
+
+:root {
+  --page: var(--color-cream);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* ---- Monospace uppercase label ---- */
+.mono-label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* SF Pro Display stack (hero subtext etc.) */
+.font-display {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
+    Roboto, var(--font-onest), sans-serif;
+}
+
+/* Diagonal-hatch gutter panels that frame the hero content */
+.hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(20, 20, 20, 0.05) 0,
+    rgba(20, 20, 20, 0.05) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+}
+
+/* ---- Marquee ---- */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
