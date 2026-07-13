@@ -67,6 +67,11 @@ body {
     Roboto, var(--font-onest), sans-serif;
 }
 
+/* Keep pixel art crisp when scaled instead of blurring it */
+.pixelated {
+  image-rendering: pixelated;
+}
+
 /* Diagonal-hatch gutter panels that frame the hero content */
 .hatch {
   background-image: repeating-linear-gradient(
