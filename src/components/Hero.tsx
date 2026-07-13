@@ -14,6 +14,13 @@ const RISE = "-36.8%"; // verticals start 203px above the grid
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
+      {/* Full-bleed rule directly under the navbar */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-[82px] h-px"
+        style={{ background: LINE }}
+      />
+
       {/* Hatched gutter panels framing the content */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[82px] mx-auto hidden max-w-[1440px] md:block">
         <div className="absolute bottom-0 left-0 top-0 w-[120px] border-r border-[#d9d9d9] hatch" />
