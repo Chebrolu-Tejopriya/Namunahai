@@ -83,6 +83,17 @@ body {
   );
 }
 
+/* Barely-there variant used behind the integrations grid */
+.hatch-soft {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(20, 20, 20, 0.035) 0,
+    rgba(20, 20, 20, 0.035) 1px,
+    transparent 1px,
+    transparent 8px
+  );
+}
+
 /* ---- Marquee ---- */
 @keyframes marquee {
   from {
