@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
-import { Onest, Geist_Mono } from "next/font/google";
+import { Onest, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const onest = Onest({
   variable: "--font-onest",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
   display: "swap",
 });
@@ -28,7 +34,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${onest.variable} ${geistMono.variable} antialiased`}
+      className={`${onest.variable} ${geist.variable} ${geistMono.variable} antialiased`}
     >
       <body>{children}</body>
     </html>
