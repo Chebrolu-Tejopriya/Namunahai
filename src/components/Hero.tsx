@@ -1,14 +1,23 @@
 import Image from "next/image";
 import Badge from "./ui/Badge";
 import PixelButton from "./ui/PixelButton";
+import FrameMarker from "./ui/FrameMarker";
+
+const LINE = "#d9d9d9";
+
+/* Framing lines around the grid, as % of the artwork's height
+   (grid frame is 551px tall in the design). */
+const TOP = "2.36%"; // 13 / 551
+const BOTTOM = "96.37%"; // 531 / 551
+const RISE = "-36.8%"; // verticals start 203px above the grid
 
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
       {/* Hatched gutter panels framing the content */}
-      <div className="pointer-events-none absolute inset-x-0 top-[82px] bottom-0 mx-auto hidden max-w-[1440px] md:block">
-        <div className="absolute bottom-0 left-2 top-0 w-[108px] border-x border-[rgba(0,0,0,0.06)] hatch" />
-        <div className="absolute bottom-0 right-2 top-0 w-[108px] border-x border-[rgba(0,0,0,0.06)] hatch" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[82px] mx-auto hidden max-w-[1440px] md:block">
+        <div className="absolute bottom-0 left-0 top-0 w-[120px] border-r border-[#d9d9d9] hatch" />
+        <div className="absolute bottom-0 right-0 top-0 w-[120px] border-l border-[#d9d9d9] hatch" />
       </div>
 
       {/* Heading block */}
@@ -31,16 +40,45 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Isometric grid illustration */}
-      <div className="relative z-10 mx-auto mt-[70px] max-w-[1240px] px-4">
-        <Image
-          src="/images/hero-grid.png"
-          alt="Isometric map of voice AI use cases: appointment setting, education, sales, property management and more"
-          width={1215}
-          height={551}
-          priority
-          className="h-auto w-full select-none"
-        />
+      {/* Isometric grid, framed by blueprint lines */}
+      <div className="relative z-10 mx-auto mt-[70px] max-w-[1200px] px-6 md:px-0">
+        <div className="relative">
+          <Image
+            src="/images/hero-grid.png"
+            alt="Isometric map of voice AI use cases: appointment setting, education, sales, property management and more"
+            width={1215}
+            height={551}
+            priority
+            className="h-auto w-full select-none"
+          />
+
+          <div className="pointer-events-none absolute inset-0 hidden md:block">
+            {/* verticals — rise above the grid to meet the copy */}
+            <span
+              className="absolute left-0 w-px"
+              style={{ top: RISE, bottom: "3.63%", background: LINE }}
+            />
+            <span
+              className="absolute right-0 w-px"
+              style={{ top: RISE, bottom: "3.63%", background: LINE }}
+            />
+
+            {/* horizontals */}
+            <span
+              className="absolute inset-x-0 h-px"
+              style={{ top: TOP, background: LINE }}
+            />
+            <span
+              className="absolute inset-x-0 h-px"
+              style={{ top: BOTTOM, background: LINE }}
+            />
+
+            <FrameMarker style={{ left: 0, top: TOP }} />
+            <FrameMarker style={{ left: "100%", top: TOP }} />
+            <FrameMarker style={{ left: 0, top: BOTTOM }} />
+            <FrameMarker style={{ left: "100%", top: BOTTOM }} />
+          </div>
+        </div>
       </div>
     </section>
   );

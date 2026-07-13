@@ -1,14 +1,5 @@
 import PixelButton from "./ui/PixelButton";
-
-/** Small white marker where the framing lines intersect. */
-function Dot({ className }: { className: string }) {
-  return (
-    <span
-      aria-hidden
-      className={`absolute size-[9px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d9d9d9] bg-white ${className}`}
-    />
-  );
-}
+import FrameMarker from "./ui/FrameMarker";
 
 export default function CTA() {
   return (
@@ -21,10 +12,10 @@ export default function CTA() {
           <div className="absolute left-[120px] right-[120px] top-[82px] border-t border-[#d9d9d9]" />
           <div className="absolute bottom-[115px] left-[120px] right-[120px] border-t border-[#d9d9d9]" />
 
-          <Dot className="left-[120px] top-[82px]" />
-          <Dot className="right-[120px] top-[82px] translate-x-1/2" />
-          <Dot className="bottom-[115px] left-[120px] translate-y-1/2" />
-          <Dot className="bottom-[115px] right-[120px] translate-x-1/2 translate-y-1/2" />
+          <FrameMarker className="left-[120px] top-[82px]" />
+          <FrameMarker className="right-[120px] top-[82px] translate-x-1/2" />
+          <FrameMarker className="bottom-[115px] left-[120px] translate-y-1/2" />
+          <FrameMarker className="bottom-[115px] right-[120px] translate-x-1/2 translate-y-1/2" />
         </div>
 
         {/* Content */}
