@@ -4,6 +4,7 @@ import LogoStrip from "@/components/LogoStrip";
 import Industries from "@/components/Industries";
 import Process from "@/components/Process";
 import Features from "@/components/Features";
+import Omnichannel from "@/components/Omnichannel";
 import Integrations from "@/components/Integrations";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
@@ -19,6 +20,7 @@ export default function Home() {
         <Industries />
         <Process />
         <Features />
+        <Omnichannel />
         <Integrations />
         <Testimonials />
         <CTA />

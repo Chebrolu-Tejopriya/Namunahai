@@ -16,7 +16,7 @@ function Card({
 }) {
   return (
     <article
-      className={`flex min-h-[358px] flex-col overflow-hidden rounded-[24px] border-[0.8px] border-n300 bg-white ${className}`}
+      className={`flex min-h-[358px] flex-col overflow-hidden rounded-[24px] border-[0.8px] border-[#e0e0da] bg-[#fafbf6] ${className}`}
     >
       <div
         className={`flex flex-1 items-center justify-center overflow-hidden ${
@@ -543,7 +543,7 @@ function MockKnowledge() {
 
 export default function Features() {
   return (
-    <section id="platform" className="bg-cream py-20">
+    <section id="features" className="bg-cream py-20">
       <div className="mx-auto max-w-[1440px] px-6">
         {/* header */}
         <div className="mx-auto flex max-w-[1240px] flex-col items-center gap-[22px] text-center">
@@ -556,8 +556,8 @@ export default function Features() {
           </p>
         </div>
 
-        {/* white panel */}
-        <div className="mx-auto mt-14 flex max-w-[1298px] flex-col gap-4 rounded-[28px] bg-white p-4">
+        {/* Cards sit directly on the cream page — no outer panel (per design) */}
+        <div className="mx-auto mt-14 flex max-w-[1266px] flex-col gap-4">
           <div className="grid gap-4 lg:grid-cols-2">
             <Card caption="Natural, real-time conversations">
               <MockConversation />
