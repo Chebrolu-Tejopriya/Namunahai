@@ -138,8 +138,10 @@ body {
 }
 
 /* ---- Footer dither ----
-   Static by default (matches the artwork). On hover the squares vibrate, and a
-   scattered subset flips black<->cream so the strip looks like it's resolving. */
+   A few random squares invert (black <-> cream) each beat, hold, then flip
+   back, so the dissolve quietly twinkles without ever losing its shape. Colour
+   only — the squares are a contiguous grid, so moving them would tear holes in
+   the pattern. */
 .dither-grid {
   display: grid;
   line-height: 0;
@@ -147,48 +149,15 @@ body {
 .dither-cell {
   aspect-ratio: 1 / 1;
   background: var(--c);
+  transition: background-color 450ms ease;
 }
-
-@keyframes ditherJitter {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  25% {
-    transform: translate3d(1px, -1px, 0);
-  }
-  50% {
-    transform: translate3d(-1px, 1px, 0);
-  }
-  75% {
-    transform: translate3d(1px, 1px, 0);
-  }
-}
-@keyframes ditherSwap {
-  0%,
-  100% {
-    background: var(--c);
-  }
-  50% {
-    background: var(--alt);
-  }
-}
-
-.dither-grid:hover .dither-cell {
-  animation: ditherJitter 0.32s steps(2, end) infinite;
-  animation-delay: var(--d);
-}
-.dither-grid:hover .dither-swap {
-  animation:
-    ditherJitter 0.32s steps(2, end) infinite,
-    ditherSwap 0.9s steps(1, end) infinite;
-  animation-delay: var(--d), var(--d);
+.dither-cell.flip {
+  background: var(--alt);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dither-grid:hover .dither-cell,
-  .dither-grid:hover .dither-swap {
-    animation: none;
+  .dither-cell {
+    transition: none;
   }
 }
 
