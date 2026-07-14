@@ -95,37 +95,45 @@ body {
 }
 
 /* ---- Hero grid callouts ----
-   Each label fades in and rises, holds, then fades out. Staggered via
-   --callout-delay so they sweep across the grid, then the cycle repeats. */
-@keyframes calloutCycle {
-  0%,
-  100% {
+   Boxes fade in and rise once, staggered across the grid. The industry inside
+   each box then swaps on a timer, replaying `swapIn` on every change. */
+@keyframes calloutIn {
+  from {
     opacity: 0;
     transform: translateY(8px);
   }
-  6% {
+  to {
     opacity: 1;
     transform: translateY(0);
-  }
-  70% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  80% {
-    opacity: 0;
-    transform: translateY(-4px);
   }
 }
-.animate-callout {
+.animate-callout-in {
   opacity: 0;
-  animation: calloutCycle 10s ease-out infinite;
-  animation-delay: var(--callout-delay, 0s);
+  animation: calloutIn 0.5s ease-out var(--callout-delay, 0s) forwards;
 }
+
+@keyframes swapIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-swap {
+  animation: swapIn 0.35s ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-callout {
+  .animate-callout-in {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+  .animate-swap {
+    animation: none;
   }
 }
 
