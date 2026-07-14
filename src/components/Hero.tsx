@@ -5,6 +5,17 @@ import FrameMarker from "./ui/FrameMarker";
 
 const LINE = "#d9d9d9";
 
+/* Industry callouts that sit on the grid. Positions are a % of the artwork
+   (1215x551), taken from Figma, so they track the image as it scales.
+   Ordered left-to-right so the reveal sweeps across the grid. */
+const CALLOUTS = [
+  { slug: "salon-spa", label: "Salon / Spa / Beauty Reception", left: "9.424%", top: "46.624%", width: "21.481%" },
+  { slug: "appointment-setter", label: "Appointment Setter", left: "14.362%", top: "16.697%", width: "15.556%" },
+  { slug: "property-management", label: "Property Management", left: "43.416%", top: "54.991%", width: "15.309%" },
+  { slug: "education-tutoring", label: "Education & Tutoring", left: "53.539%", top: "13.612%", width: "12.428%" },
+  { slug: "telecom-customer-care", label: "Telecom Customer Care", left: "80.123%", top: "23.049%", width: "15.226%" },
+];
+
 /* Framing lines around the grid, as % of the artwork's height
    (grid frame is 551px tall in the design). */
 const TOP = "2.36%"; // 13 / 551
@@ -52,12 +63,29 @@ export default function Hero() {
         <div className="relative">
           <Image
             src="/images/hero-grid.png"
-            alt="Isometric map of voice AI use cases: appointment setting, education, sales, property management and more"
+            alt="Isometric map of voice AI use cases"
             width={1215}
             height={551}
             priority
             className="h-auto w-full select-none"
           />
+
+          {/* Industry callouts — fade in and rise, one after another, on a loop */}
+          {CALLOUTS.map((c, i) => (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              key={c.slug}
+              src={`/images/callout-${c.slug}.png`}
+              alt={c.label}
+              style={{
+                left: c.left,
+                top: c.top,
+                width: c.width,
+                ["--callout-delay" as string]: `${i * 0.5}s`,
+              }}
+              className="animate-callout pointer-events-none absolute h-auto select-none"
+            />
+          ))}
 
           <div className="pointer-events-none absolute inset-0 hidden md:block">
             {/* verticals — rise above the grid to meet the copy */}
