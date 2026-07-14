@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Badge from "./ui/Badge";
 import PixelButton from "./ui/PixelButton";
-import FrameMarker from "./ui/FrameMarker";
 import Callout, { type CalloutSpec } from "./ui/Callout";
 
 const LINE = "#d9d9d9";
+/** x of the corner nubs baked into the artwork (7px of 1215) */
+const NUB_X = "0.576%";
 
 /* Industries each callout rotates through. Every anchor starts on its own
    design label, then cycles, so a different industry is on show over time.
@@ -52,11 +53,9 @@ const CONNECTORS = [
   "1020,219 1012,203 1010,189 1012,179 1016,162 1016,138 1004,127",
 ];
 
-/* Framing lines around the grid, as % of the artwork's height
-   (grid frame is 551px tall in the design). */
-const TOP = "2.36%"; // 13 / 551
-const BOTTOM = "96.37%"; // 531 / 551
-const RISE = "-36.8%"; // verticals start 203px above the grid
+/* The verticals, as a % of the artwork's height (551px in the design).
+   They run from above the grid down to the lower rule (531/551 = 96.37%). */
+const RISE = "-36.8%"; // start 203px above the grid
 
 export default function Hero() {
   return (
@@ -68,10 +67,12 @@ export default function Hero() {
         style={{ background: LINE }}
       />
 
-      {/* Hatched gutter panels framing the content */}
+      {/* Hatched gutter panels framing the content. 127px, not 120: their inner
+          edge has to land on the artwork's corner nubs (7px inside the grid),
+          otherwise it reads as a second vertical line beside them. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[82px] mx-auto hidden max-w-[1440px] md:block">
-        <div className="absolute bottom-0 left-0 top-0 w-[120px] border-r border-[#d9d9d9] hatch" />
-        <div className="absolute bottom-0 right-0 top-0 w-[120px] border-l border-[#d9d9d9] hatch" />
+        <div className="absolute bottom-0 left-0 top-0 w-[127px] border-r border-[#d9d9d9] hatch" />
+        <div className="absolute bottom-0 right-0 top-0 w-[127px] border-l border-[#d9d9d9] hatch" />
       </div>
 
       {/* Heading block */}
@@ -133,31 +134,29 @@ export default function Hero() {
             <Callout key={spec.slug} spec={spec} index={i} />
           ))}
 
+          {/* The artwork already carries the two horizontal rules and all four
+              corner nubs, so only the verticals are drawn here — they rise out
+              of the grid to meet the copy. They sit on the nubs' x, not the
+              container edge, or they'd land ~7px off and read as a second nub. */}
           <div className="pointer-events-none absolute inset-0 hidden md:block">
-            {/* verticals — rise above the grid to meet the copy */}
             <span
-              className="absolute left-0 w-px"
-              style={{ top: RISE, bottom: "3.63%", background: LINE }}
+              className="absolute w-px"
+              style={{
+                left: NUB_X,
+                top: RISE,
+                bottom: "3.63%",
+                background: LINE,
+              }}
             />
             <span
-              className="absolute right-0 w-px"
-              style={{ top: RISE, bottom: "3.63%", background: LINE }}
+              className="absolute w-px"
+              style={{
+                right: NUB_X,
+                top: RISE,
+                bottom: "3.63%",
+                background: LINE,
+              }}
             />
-
-            {/* horizontals */}
-            <span
-              className="absolute inset-x-0 h-px"
-              style={{ top: TOP, background: LINE }}
-            />
-            <span
-              className="absolute inset-x-0 h-px"
-              style={{ top: BOTTOM, background: LINE }}
-            />
-
-            <FrameMarker style={{ left: 0, top: TOP }} />
-            <FrameMarker style={{ left: "100%", top: TOP }} />
-            <FrameMarker style={{ left: 0, top: BOTTOM }} />
-            <FrameMarker style={{ left: "100%", top: BOTTOM }} />
           </div>
         </div>
       </div>
