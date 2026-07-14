@@ -290,19 +290,6 @@ function PanelBehaviour() {
           <Node key={n.label} n={n} />
         ))}
       </div>
-
-      <Chip className="left-2 top-[28%]">
-        <Clock size={12} /> Business Hours
-      </Chip>
-      <Chip className="right-2 top-[14%]">
-        <Globe size={12} /> Languages
-      </Chip>
-      <Chip className="right-1 top-[46%]">
-        <Tag size={12} /> Pricing
-      </Chip>
-      <Chip className="bottom-3 left-4">
-        <Book size={12} /> Knowledge Base
-      </Chip>
     </div>
   );
 }
@@ -400,27 +387,31 @@ const steps = [
 
 export default function Process() {
   const [active, setActive] = useState(0);
+  const [reduced, setReduced] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const Panel = steps[active].Panel;
 
-  /* Scrolling through the section walks 01 -> 02 -> 03. Progress is measured
-     from the section's travel past the viewport, not from wheel events, so it
-     tracks the scrollbar and works on touch. */
+  /* The section pins to the viewport and the steps advance 01 -> 02 -> 03 as
+     you scroll through its extra height, then it releases. Progress is measured
+     from how far the tall track has scrolled past the top, so it tracks the
+     scrollbar and works on touch. Reduced-motion skips the pin entirely (a
+     tall, static pinned block would just be dead scroll) and lets clicks drive
+     the steps instead. */
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(reduce.matches);
+    if (reduce.matches) return;
 
     const read = () => {
       const el = ref.current;
       if (!el) return;
-      const r = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const from = vh * 0.75; // r.top at which step 01 is showing
-      const to = -r.height + vh * 0.55; // r.top at which step 03 is showing
-      const p = (from - r.top) / (from - to);
-      const i = Math.min(
-        steps.length - 1,
-        Math.max(0, Math.floor(p * steps.length)),
+      const travel = el.offsetHeight - window.innerHeight;
+      const scrolled = Math.min(
+        Math.max(-el.getBoundingClientRect().top, 0),
+        travel,
       );
+      const p = travel > 0 ? scrolled / travel : 0;
+      const i = Math.min(steps.length - 1, Math.floor(p * steps.length));
       setActive(i);
     };
 
@@ -434,8 +425,17 @@ export default function Process() {
   }, []);
 
   return (
-    <section id="platform" ref={ref} className="bg-cream py-24">
-      <div className="mx-auto max-w-[1200px] px-6">
+    <section id="platform" className="bg-cream">
+      {/* Tall track: while it scrolls past, the inner block stays pinned. */}
+      <div ref={ref} className={reduced ? "relative" : "relative h-[300vh]"}>
+        <div
+          className={
+            reduced
+              ? "py-24"
+              : "sticky top-0 flex min-h-screen items-center py-16"
+          }
+        >
+          <div className="mx-auto w-full max-w-[1200px] px-6">
         {/* Header row */}
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
@@ -516,6 +516,8 @@ export default function Process() {
               </div>
             </div>
           </div>
+          </div>
+        </div>
         </div>
       </div>
     </section>
