@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PixelButton from "./ui/PixelButton";
 
 /* ---------------- icons ---------------- */
@@ -81,21 +81,19 @@ const Shield = (p: { size?: number }) => (
 );
 
 const WAVE = [6, 10, 5, 13, 8, 15, 6, 11, 9, 5, 14, 7, 10, 6, 12, 8, 5, 11, 7, 13];
-function Wave({ bars = WAVE, tall = 1 }: { bars?: number[]; tall?: number }) {
+function Wave({ bars = WAVE }: { bars?: number[] }) {
   return (
     <span className="flex items-center gap-[2px]" aria-hidden>
       {bars.map((h, i) => (
         <span
           key={i}
-          style={{ height: h * tall }}
+          style={{ height: h }}
           className="w-[2px] shrink-0 rounded-full bg-n400"
         />
       ))}
     </span>
   );
 }
-
-/* ---------------- shared bits ---------------- */
 
 function Chip({
   children,
@@ -106,40 +104,12 @@ function Chip({
 }) {
   return (
     <span
-      className={`absolute flex items-center gap-1.5 rounded-[10px] border border-n200 bg-white px-2.5 py-1.5 text-[11px] text-n600 shadow-[0_4px_14px_-6px_rgba(0,0,0,0.15)] ${className}`}
+      className={`absolute flex items-center gap-1.5 whitespace-nowrap rounded-[10px] border border-n200 bg-white px-2.5 py-1.5 text-[11px] text-n600 shadow-[0_4px_12px_-8px_rgba(0,0,0,0.2)] ${className}`}
     >
       {children}
     </span>
   );
 }
-
-/** flow node */
-function Node({
-  icon,
-  label,
-  active,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  active?: boolean;
-}) {
-  return (
-    <span className="flex flex-col items-center gap-0.5 rounded-[8px] border border-n200 bg-white px-2.5 py-1.5 shadow-[0_3px_10px_-6px_rgba(0,0,0,0.2)]">
-      <span className="flex items-center gap-1.5 text-[10.5px] font-medium text-slate">
-        <span className="text-n600">{icon}</span>
-        {label}
-      </span>
-      {active && (
-        <span className="flex items-center gap-1 text-[8.5px] text-success">
-          <span className="size-1 rounded-full bg-success" />
-          Active
-        </span>
-      )}
-    </span>
-  );
-}
-
-const dash = "border-dashed border-n300";
 
 /* ---------------- step 01 ---------------- */
 
@@ -151,7 +121,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="mt-2.5">
+    <div className="mt-2">
       <p className="mb-1 text-[10px] font-medium text-slate">{label}</p>
       {children}
     </div>
@@ -160,30 +130,30 @@ function Field({
 
 function PanelCreate() {
   return (
-    <div className="relative flex h-full items-center justify-center px-10 py-5">
+    <div className="relative flex h-full items-center justify-center px-10 py-8">
       <Chip className="left-3 top-1/2 -translate-y-1/2 !px-2">
         <Globe size={14} />
       </Chip>
-      <Chip className="right-10 top-3 !px-2">
+      <Chip className="right-10 top-5 !px-2">
         <Wave bars={[5, 9, 13, 9, 5]} />
       </Chip>
-      <Chip className="bottom-4 right-6 !px-2">
+      <Chip className="bottom-6 right-6 !px-2">
         <Chat size={14} />
       </Chip>
 
-      <div className="w-full max-w-[300px] rounded-[12px] border border-n200 bg-white p-3.5 shadow-[0_18px_40px_-24px_rgba(0,0,0,0.3)]">
+      <div className="w-full max-w-[290px] rounded-[12px] border border-n200 bg-white p-3 shadow-[0_14px_34px_-26px_rgba(0,0,0,0.28)]">
         <span className="mb-1 flex size-7 items-center justify-center rounded-[7px] border border-n200 text-n600">
           <User size={14} />
         </span>
 
         <Field label="Assistant Name">
-          <div className="rounded-[6px] border border-n200 px-2 py-1.5 text-[11px] text-slate">
+          <div className="rounded-[6px] border border-n200 px-2 py-1 text-[11px] text-slate">
             Solar Assistant
           </div>
         </Field>
 
         <Field label="Voice">
-          <div className="flex items-center gap-1.5 rounded-[6px] border border-n200 px-2 py-1.5 text-[11px] text-slate">
+          <div className="flex items-center gap-1.5 rounded-[6px] border border-n200 px-2 py-1 text-[11px] text-slate">
             <Wave bars={[4, 8, 11, 8, 4]} />
             Priya
             <svg
@@ -203,11 +173,9 @@ function PanelCreate() {
             {["English", "Telugu", "Hindi"].map((l) => (
               <span
                 key={l}
-                className="flex flex-1 items-center justify-center gap-1 rounded-[6px] border border-n200 py-1.5 text-[10px] text-slate"
+                className="flex flex-1 items-center justify-center gap-1 rounded-[6px] border border-n200 py-1 text-[10px] text-slate"
               >
-                <span className="text-slate">
-                  <CheckI size={9} />
-                </span>
+                <CheckI size={9} />
                 {l}
               </span>
             ))}
@@ -215,12 +183,12 @@ function PanelCreate() {
         </Field>
 
         <Field label="Greeting">
-          <div className="rounded-[6px] border border-n200 px-2 py-2 text-[11px] text-n500">
+          <div className="rounded-[6px] border border-n200 px-2 py-1.5 text-[11px] text-n500">
             &ldquo;Hello, thanks for calling...&rdquo;
           </div>
         </Field>
 
-        <div className="mt-3 flex items-center gap-2 rounded-full border border-n200 p-1">
+        <div className="mt-2.5 flex items-center gap-2 rounded-full border border-n200 p-1">
           <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-black text-white">
             <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor">
               <path d="M8 5v14l11-7z" />
@@ -238,67 +206,103 @@ function PanelCreate() {
   );
 }
 
-/* ---------------- step 02 ---------------- */
+/* ---------------- step 02 ----------------
+   Nodes are placed on a fixed 400x300 grid and the leaders are drawn in an SVG
+   on the same grid, so every line meets its node exactly. (Stacking bordered
+   spans as connectors left visible gaps and drifted off-centre.) */
+
+const W = 400;
+const H = 300;
+
+type N = { x: number; y: number; label: string; icon: React.ReactNode; active?: boolean };
+
+const NODES: N[] = [
+  { x: 200, y: 24, label: "Incoming Call", icon: <Phone size={11} /> },
+  { x: 200, y: 74, label: "Intent Detection", icon: <Spark size={11} />, active: true },
+  { x: 66, y: 140, label: "FAQ", icon: <Book size={11} /> },
+  { x: 200, y: 140, label: "Appointment", icon: <Cal size={11} /> },
+  { x: 334, y: 140, label: "Sales", icon: <Tag size={11} /> },
+  { x: 66, y: 194, label: "Answer", icon: <Chat size={11} />, active: true },
+  { x: 200, y: 194, label: "Check Calendar", icon: <Cal size={11} />, active: true },
+  { x: 334, y: 194, label: "Collect Details", icon: <User size={11} />, active: true },
+  { x: 200, y: 258, label: "Book Slot", icon: <CheckI size={11} />, active: true },
+  { x: 334, y: 258, label: "CRM", icon: <Db size={11} />, active: true },
+];
+
+/** node half-heights on the grid: plain 11, with an Active line 16 */
+const HH = (n: N) => (n.active ? 16 : 11);
+
+const LEADERS = [
+  // incoming call -> intent detection
+  "M200,35 L200,58",
+  // intent detection -> branch bus -> the three intents
+  "M200,90 L200,110 M66,110 L334,110 M66,110 L66,129 M200,110 L200,129 M334,110 L334,129",
+  // each intent -> its handler
+  "M66,151 L66,178 M200,151 L200,178 M334,151 L334,178",
+  // handlers -> outcomes
+  "M200,210 L200,242 M334,210 L334,242",
+];
+
+function Node({ n }: { n: N }) {
+  return (
+    <span
+      style={{ left: `${(n.x / W) * 100}%`, top: `${(n.y / H) * 100}%` }}
+      className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-0.5 whitespace-nowrap rounded-[8px] border border-n200 bg-white px-2.5 py-1.5 shadow-[0_3px_10px_-8px_rgba(0,0,0,0.25)]"
+    >
+      <span className="flex items-center gap-1.5 text-[10.5px] font-medium text-slate">
+        <span className="text-n600">{n.icon}</span>
+        {n.label}
+      </span>
+      {n.active && (
+        <span className="flex items-center gap-1 text-[8.5px] text-success">
+          <span className="size-1 rounded-full bg-success" />
+          Active
+        </span>
+      )}
+    </span>
+  );
+}
 
 function PanelBehaviour() {
   return (
-    <div className="relative flex h-full flex-col items-center justify-center gap-2 px-6 py-4">
-      <Chip className="left-3 top-[26%]">
-        <Clock size={12} /> Business Hours
-      </Chip>
-      <Chip className="right-4 top-[16%]">
-        <Globe size={12} /> Languages
-      </Chip>
-      <Chip className="right-2 top-[44%]">
-        <Tag size={12} /> Pricing
-      </Chip>
-      {/* kept off-centre: dead centre sits on top of the Book Slot node */}
-      <Chip className="bottom-2 left-[9%]">
-        <Book size={12} /> Knowledge Base
-      </Chip>
+    <div className="relative flex h-full items-center justify-center px-6 py-5">
+      <div className="relative aspect-[400/300] w-full max-w-[430px]">
+        <svg
+          viewBox={`0 0 ${W} ${H}`}
+          preserveAspectRatio="none"
+          aria-hidden
+          className="absolute inset-0 h-full w-full"
+        >
+          {LEADERS.map((d) => (
+            <path
+              key={d}
+              d={d}
+              fill="none"
+              stroke="#c9c9c4"
+              strokeWidth="1"
+              strokeDasharray="3 3"
+              vectorEffect="non-scaling-stroke"
+            />
+          ))}
+        </svg>
 
-      <Node icon={<Phone size={12} />} label="Incoming Call" />
-      <span className={`h-3 border-l ${dash}`} />
-      <Node icon={<Spark size={12} />} label="Intent Detection" active />
-
-      {/* branch */}
-      <span className={`h-2 border-l ${dash}`} />
-      <span className={`h-0 w-[62%] border-t ${dash}`} />
-
-      <div className="grid w-full max-w-[380px] grid-cols-3 gap-2">
-        {[
-          { i: <Book size={11} />, l: "FAQ" },
-          { i: <Cal size={11} />, l: "Appointment" },
-          { i: <Tag size={11} />, l: "Sales" },
-        ].map((n) => (
-          <span key={n.l} className="flex flex-col items-center">
-            <span className={`h-2 border-l ${dash}`} />
-            <Node icon={n.i} label={n.l} />
-            <span className={`h-2 border-l ${dash}`} />
-          </span>
-        ))}
-
-        {[
-          { i: <Chat size={11} />, l: "Answer" },
-          { i: <Cal size={11} />, l: "Check Calendar" },
-          { i: <User size={11} />, l: "Collect Details" },
-        ].map((n) => (
-          <span key={n.l} className="flex flex-col items-center">
-            <Node icon={n.i} label={n.l} active />
-          </span>
-        ))}
-
-        <span />
-        {[
-          { i: <CheckI size={11} />, l: "Book Slot" },
-          { i: <Db size={11} />, l: "CRM" },
-        ].map((n) => (
-          <span key={n.l} className="flex flex-col items-center">
-            <span className={`h-2.5 border-l ${dash}`} />
-            <Node icon={n.i} label={n.l} active />
-          </span>
+        {NODES.map((n) => (
+          <Node key={n.label} n={n} />
         ))}
       </div>
+
+      <Chip className="left-2 top-[28%]">
+        <Clock size={12} /> Business Hours
+      </Chip>
+      <Chip className="right-2 top-[14%]">
+        <Globe size={12} /> Languages
+      </Chip>
+      <Chip className="right-1 top-[46%]">
+        <Tag size={12} /> Pricing
+      </Chip>
+      <Chip className="bottom-3 left-4">
+        <Book size={12} /> Knowledge Base
+      </Chip>
     </div>
   );
 }
@@ -312,56 +316,60 @@ const CALL_WAVE = [
 
 function PanelLive() {
   return (
-    <div className="relative flex h-full items-center justify-center py-4">
-      <Chip className="right-3 top-1/2 -translate-y-1/2">
-        <Phone size={12} /> Calls Active
-        <span className="size-1 rounded-full bg-success" />
-      </Chip>
-
-      <div className="flex h-full max-h-[300px] w-[190px] flex-col rounded-[22px] border border-n200 bg-white px-3 pb-3 pt-2 shadow-[0_20px_50px_-28px_rgba(0,0,0,0.35)]">
-        <div className="flex items-center justify-between text-[8px] font-medium text-slate">
-          <span>9:41</span>
-          <span className="flex items-center gap-0.5">
+    <div className="flex h-full items-center justify-center py-6">
+      {/* the chip hangs off the phone, so it stays beside it rather than
+          drifting out to the panel edge */}
+      <div className="relative">
+        <div className="flex h-[290px] w-[186px] flex-col rounded-[22px] border border-n200 bg-white px-3 pb-3 pt-2 shadow-[0_10px_26px_-22px_rgba(0,0,0,0.22)]">
+          <div className="flex items-center justify-between text-[8px] font-medium text-slate">
+            <span>9:41</span>
             <span className="h-1.5 w-3 rounded-[1px] border border-n400" />
-          </span>
-        </div>
+          </div>
 
-        <p className="mt-3 text-center text-[10px] text-n500">Business Number</p>
-        <p className="text-center text-[14px] font-semibold tracking-[-0.01em] text-slate">
-          +91 98XXXXXXX
-        </p>
-        <p className="mt-0.5 flex items-center justify-center gap-1 text-[9px] text-success">
-          <CheckI size={9} /> Connected
-        </p>
+          <p className="mt-3 text-center text-[10px] text-n500">
+            Business Number
+          </p>
+          <p className="text-center text-[14px] font-semibold tracking-[-0.01em] text-slate">
+            +91 98XXXXXXX
+          </p>
+          <p className="mt-0.5 flex items-center justify-center gap-1 text-[9px] text-success">
+            <CheckI size={9} /> Connected
+          </p>
 
-        <div className="my-3 flex flex-1 items-center justify-center">
-          <span className="flex size-[104px] items-center justify-center rounded-full bg-n50">
-            <span className="flex items-center gap-[2px]">
-              {CALL_WAVE.map((h, i) => (
-                <span
-                  key={i}
-                  style={{ height: h }}
-                  className="w-[2px] rounded-full bg-slate"
-                />
-              ))}
+          <div className="my-3 flex flex-1 items-center justify-center">
+            <span className="flex size-[104px] items-center justify-center rounded-full bg-n50">
+              <span className="flex items-center gap-[2px]">
+                {CALL_WAVE.map((h, i) => (
+                  <span
+                    key={i}
+                    style={{ height: h }}
+                    className="w-[2px] rounded-full bg-slate"
+                  />
+                ))}
+              </span>
             </span>
+          </div>
+
+          <span className="mx-auto flex items-center gap-1 rounded-full bg-black px-2 py-[3px] text-[8.5px] font-medium text-white">
+            <span className="size-1 rounded-full bg-white" /> Live
           </span>
+
+          <div className="mt-3 flex justify-around border-t border-n200 pt-2 text-[8px] text-n500">
+            <span className="flex flex-col items-center gap-0.5">
+              <Clock size={12} />
+              24&times;7
+            </span>
+            <span className="flex flex-col items-center gap-0.5">
+              <Shield size={12} />
+              Monitoring Enabled
+            </span>
+          </div>
         </div>
 
-        <span className="mx-auto flex items-center gap-1 rounded-full bg-black px-2 py-[3px] text-[8.5px] font-medium text-white">
-          <span className="size-1 rounded-full bg-white" /> Live
-        </span>
-
-        <div className="mt-3 flex justify-around border-t border-n200 pt-2 text-[8px] text-n500">
-          <span className="flex flex-col items-center gap-0.5">
-            <Clock size={12} />
-            24&times;7
-          </span>
-          <span className="flex flex-col items-center gap-0.5">
-            <Shield size={12} />
-            Monitoring Enabled
-          </span>
-        </div>
+        <Chip className="left-full top-1/2 ml-3 -translate-y-1/2">
+          <Phone size={12} /> Calls Active
+          <span className="size-1 rounded-full bg-success" />
+        </Chip>
       </div>
     </div>
   );
@@ -392,10 +400,41 @@ const steps = [
 
 export default function Process() {
   const [active, setActive] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
   const Panel = steps[active].Panel;
 
+  /* Scrolling through the section walks 01 -> 02 -> 03. Progress is measured
+     from the section's travel past the viewport, not from wheel events, so it
+     tracks the scrollbar and works on touch. */
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const read = () => {
+      const el = ref.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const from = vh * 0.75; // r.top at which step 01 is showing
+      const to = -r.height + vh * 0.55; // r.top at which step 03 is showing
+      const p = (from - r.top) / (from - to);
+      const i = Math.min(
+        steps.length - 1,
+        Math.max(0, Math.floor(p * steps.length)),
+      );
+      setActive(i);
+    };
+
+    read();
+    window.addEventListener("scroll", read, { passive: true });
+    window.addEventListener("resize", read);
+    return () => {
+      window.removeEventListener("scroll", read);
+      window.removeEventListener("resize", read);
+    };
+  }, []);
+
   return (
-    <section id="platform" className="bg-cream py-24">
+    <section id="platform" ref={ref} className="bg-cream py-24">
       <div className="mx-auto max-w-[1200px] px-6">
         {/* Header row */}
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -414,15 +453,16 @@ export default function Process() {
 
         {/* Content */}
         <div className="mt-16 grid items-center gap-12 md:grid-cols-2">
-          {/* Steps — pick one to preview it */}
-          <ol className="relative flex flex-col gap-8 pl-4">
-            <span className="absolute bottom-3 left-4 top-3 w-px bg-line" />
+          {/* Steps. The rail sits left of the circles and the active marker sits
+              *on* it, so there is one line rather than two parallel ones. */}
+          <ol className="relative flex flex-col gap-8 pl-10">
+            <span className="absolute bottom-3 left-0 top-3 w-px bg-line" />
             {steps.map((s, i) => {
               const on = i === active;
               return (
                 <li key={s.n} className="relative">
                   {on && (
-                    <span className="absolute -left-4 top-1 h-[calc(100%-8px)] w-[2px] bg-ink" />
+                    <span className="absolute -left-10 top-0 h-full w-[2px] bg-ink" />
                   )}
                   <button
                     type="button"
@@ -431,7 +471,7 @@ export default function Process() {
                     className="flex w-full items-start gap-4 text-left"
                   >
                     <span
-                      className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-[12px] font-medium transition-colors ${
+                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-[12px] font-medium transition-colors ${
                         on
                           ? "border-ink bg-ink text-white"
                           : "border-line bg-white text-ink"
@@ -457,7 +497,7 @@ export default function Process() {
             })}
           </ol>
 
-          {/* Window mockup — shows the selected step */}
+          {/* Window mockup — shows the current step */}
           <div>
             <div className="mb-3 flex h-px w-full bg-line">
               <span
