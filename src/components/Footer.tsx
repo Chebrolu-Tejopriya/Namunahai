@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import DitherStrip from "./ui/DitherStrip";
 
 function Social({
   label,
@@ -53,15 +54,10 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Pixel dither: black dissolves into cream */}
-      <Image
-        src="/images/footer-dither.png"
-        alt=""
-        aria-hidden
-        width={1440}
-        height={240}
-        className="pixelated -mt-px block h-auto w-full select-none"
-      />
+      {/* Pixel dither: black dissolves into cream. Hover it — the squares vibrate. */}
+      <div className="-mt-px">
+        <DitherStrip />
+      </div>
 
       {/* Bottom bar (on cream) */}
       <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-3 px-6 pb-7 text-[14px] text-ink sm:flex-row md:px-[50px]">
