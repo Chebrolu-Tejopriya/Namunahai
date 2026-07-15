@@ -247,14 +247,14 @@ function Node({ n }: { n: N }) {
   return (
     <span
       style={{ left: `${(n.x / W) * 100}%`, top: `${(n.y / H) * 100}%` }}
-      className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-0.5 whitespace-nowrap rounded-[8px] border border-n200 bg-white px-2.5 py-1.5 shadow-[0_3px_10px_-8px_rgba(0,0,0,0.25)]"
+      className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-0.5 whitespace-nowrap rounded-[8px] border border-n200 bg-white px-1.5 py-1 shadow-[0_3px_10px_-8px_rgba(0,0,0,0.25)] sm:px-2.5 sm:py-1.5"
     >
-      <span className="flex items-center gap-1.5 text-[10.5px] font-medium text-slate">
+      <span className="flex items-center gap-1 text-[8.5px] font-medium text-slate sm:gap-1.5 sm:text-[10.5px]">
         <span className="text-n600">{n.icon}</span>
         {n.label}
       </span>
       {n.active && (
-        <span className="flex items-center gap-1 text-[8.5px] text-success">
+        <span className="flex items-center gap-1 text-[7px] text-success sm:text-[8.5px]">
           <span className="size-1 rounded-full bg-success" />
           Active
         </span>
@@ -266,7 +266,9 @@ function Node({ n }: { n: N }) {
 function PanelBehaviour() {
   return (
     <div className="relative flex h-full items-center justify-center px-2 py-5 sm:px-6">
-      <div className="relative aspect-[400/300] w-full max-w-[430px]">
+      {/* nodes are a fixed size, so on a narrow phone the 3-column flow is
+          scaled down to fit rather than clipping its right edge */}
+      <div className="relative aspect-[400/300] w-full max-w-[430px] scale-[0.92] sm:scale-100">
         <svg
           viewBox={`0 0 ${W} ${H}`}
           preserveAspectRatio="none"
@@ -396,7 +398,9 @@ function WindowFrame({ children }: { children: React.ReactNode }) {
         <span className="h-2.5 w-2.5 rounded-full bg-[#e0ded4]" />
         <span className="h-2.5 w-2.5 rounded-full bg-[#e0ded4]" />
       </div>
-      <div className="aspect-[16/10] w-full bg-gradient-to-b from-[#fbfaf6] to-[#f3f1e9]">
+      {/* On phones the window grows to fit the screen so nothing overflows or
+          loses its padding; desktop keeps the fixed 16:10 ratio. */}
+      <div className="w-full bg-gradient-to-b from-[#fbfaf6] to-[#f3f1e9] md:aspect-[16/10]">
         {children}
       </div>
     </div>

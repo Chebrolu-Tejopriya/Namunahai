@@ -143,8 +143,13 @@ function Card({
 
 export default function Industries() {
   const [active, setActive] = useState(3); // Real Estate
+  const [reduced, setReduced] = useState(false);
 
   const go = useCallback((dir: number) => setActive((a) => mod(a + dir, TOTAL)), []);
+
+  useEffect(() => {
+    setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -154,6 +159,15 @@ export default function Industries() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [go]);
+
+  /* Auto-advance to the next industry. The timer keys off `active`, so it
+     resets whenever the user clicks a label or presses an arrow — their choice
+     isn't overridden a moment later. */
+  useEffect(() => {
+    if (reduced) return;
+    const t = setTimeout(() => setActive((a) => mod(a + 1, TOTAL)), 3500);
+    return () => clearTimeout(t);
+  }, [active, reduced]);
 
   // Render the list three times so the strip always has neighbours on both sides.
   const strip = [...INDUSTRIES, ...INDUSTRIES, ...INDUSTRIES];
@@ -172,11 +186,18 @@ export default function Industries() {
           </p>
         </div>
 
-        {/* Cards: previous / active / next */}
-        <div className="mt-14 grid items-start gap-5 md:grid-cols-3">
-          <Card industry={INDUSTRIES[mod(active - 1, TOTAL)]} />
-          <Card industry={INDUSTRIES[active]} featured />
-          <Card industry={INDUSTRIES[mod(active + 1, TOTAL)]} />
+        {/* Cards */}
+        <div className="mt-14">
+          {/* Mobile: only the active industry (auto-advances) */}
+          <div className="md:hidden">
+            <Card industry={INDUSTRIES[active]} featured />
+          </div>
+          {/* Desktop: previous / active / next */}
+          <div className="hidden items-start gap-5 md:grid md:grid-cols-3">
+            <Card industry={INDUSTRIES[mod(active - 1, TOTAL)]} />
+            <Card industry={INDUSTRIES[active]} featured />
+            <Card industry={INDUSTRIES[mod(active + 1, TOTAL)]} />
+          </div>
         </div>
       </div>
 
