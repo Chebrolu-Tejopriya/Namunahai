@@ -81,10 +81,12 @@ export default function Omnichannel() {
               aria-hidden
               className="absolute inset-0 h-full w-full"
             >
+              {/* Lines end a little past each card's top edge; the cards paint
+                  over the SVG, so the tail tucks behind and connects cleanly. */}
               {[
-                "M214 89 C 196 122 120 140 89 164",
-                "M229 89 C 229 126 231 148 231 176",
-                "M244 89 C 262 122 348 140 379 164",
+                "M214 89 C 196 128 118 168 89 210",
+                "M229 89 C 229 140 231 178 231 216",
+                "M244 89 C 262 128 350 168 379 210",
               ].map((d) => (
                 <path
                   key={d}
