@@ -164,9 +164,18 @@ export default function Ads() {
           </div>
         </div>
 
-        {/* Mobile: stacked */}
-        <div className="mt-10 flex flex-col items-center gap-5 md:hidden">
-          <div className="flex w-full max-w-[300px] flex-col gap-2.5">
+        {/* Mobile: stacked, with a dotted connector threading top to bottom */}
+        <div className="relative mt-10 flex flex-col items-center gap-5 md:hidden">
+          {/* the line sits behind the pills, so it only shows in the gaps */}
+          <span
+            aria-hidden
+            className="absolute left-1/2 top-2 bottom-2 z-0 w-[2px] -translate-x-1/2"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(to bottom, #b6b3a6 0 2px, transparent 2px 7px)",
+            }}
+          />
+          <div className="relative z-10 flex w-full max-w-[300px] flex-col gap-2.5">
             {SOURCES.map((s) => (
               <Pill
                 key={s.label}
@@ -176,8 +185,10 @@ export default function Ads() {
               />
             ))}
           </div>
-          <Badge cq={false} />
-          <div className="flex w-full max-w-[300px] flex-col gap-2.5">
+          <div className="relative z-10">
+            <Badge cq={false} />
+          </div>
+          <div className="relative z-10 flex w-full max-w-[300px] flex-col gap-2.5">
             {OUTCOMES.map((o) => (
               <Pill
                 key={o.label}

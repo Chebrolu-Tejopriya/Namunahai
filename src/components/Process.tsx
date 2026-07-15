@@ -265,7 +265,7 @@ function Node({ n }: { n: N }) {
 
 function PanelBehaviour() {
   return (
-    <div className="relative flex h-full items-center justify-center px-6 py-5">
+    <div className="relative flex h-full items-center justify-center px-2 py-5 sm:px-6">
       <div className="relative aspect-[400/300] w-full max-w-[430px]">
         <svg
           viewBox={`0 0 ${W} ${H}`}
@@ -353,7 +353,9 @@ function PanelLive() {
           </div>
         </div>
 
-        <Chip className="left-full top-1/2 ml-3 -translate-y-1/2">
+        {/* hidden on phones — it hangs off the mock and would clip in the
+            narrow mobile window */}
+        <Chip className="left-full top-1/2 ml-3 hidden -translate-y-1/2 sm:flex">
           <Phone size={12} /> Calls Active
           <span className="size-1 rounded-full bg-success" />
         </Chip>
@@ -384,6 +386,75 @@ const steps = [
     Panel: PanelLive,
   },
 ];
+
+/* The browser-window chrome that wraps a step's screen. */
+function WindowFrame({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="overflow-hidden rounded-[14px] border border-line bg-white shadow-[0_20px_60px_-30px_rgba(0,0,0,0.25)]">
+      <div className="flex items-center gap-2 border-b border-line/70 px-4 py-3">
+        <span className="h-2.5 w-2.5 rounded-full bg-[#e0ded4]" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#e0ded4]" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#e0ded4]" />
+      </div>
+      <div className="aspect-[16/10] w-full bg-gradient-to-b from-[#fbfaf6] to-[#f3f1e9]">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* Fades its child in the first time it scrolls into view (mobile screens). */
+function Reveal({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setShown(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div
+      ref={ref}
+      className={`transition-all duration-700 ease-out ${
+        shown ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
+      }`}
+    >
+      {children}
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p className="mono-label text-[13px] text-muted">3 Simple Steps</p>
+        <h2 className="mt-3 max-w-[620px] text-[26px] font-semibold leading-[1.1] tracking-[-0.02em] text-ink sm:text-[44px]">
+          From zero to live in 10 minutes.
+        </h2>
+        <p className="mt-4 max-w-[560px] text-[17px] leading-[1.5] text-cool">
+          Set up your AI voice assistant in three simple steps. No engineering
+          required.
+        </p>
+      </div>
+      <PixelButton href="#demo">See how it works</PixelButton>
+    </div>
+  );
+}
 
 export default function Process() {
   const [active, setActive] = useState(0);
@@ -426,98 +497,114 @@ export default function Process() {
 
   return (
     <section id="platform" className="bg-cream">
-      {/* Tall track: while it scrolls past, the inner block stays pinned. */}
-      <div ref={ref} className={reduced ? "relative" : "relative h-[300vh]"}>
-        <div
-          className={
-            reduced
-              ? "py-24"
-              : "sticky top-0 flex min-h-screen items-center py-16"
-          }
-        >
-          <div className="mx-auto w-full max-w-[1200px] px-6">
-        {/* Header row */}
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="mono-label text-[13px] text-muted">3 Simple Steps</p>
-            <h2 className="mt-3 max-w-[620px] text-[26px] font-semibold leading-[1.1] tracking-[-0.02em] text-ink sm:text-[44px]">
-              From zero to live in 10 minutes.
-            </h2>
-            <p className="mt-4 max-w-[560px] text-[17px] leading-[1.5] text-cool">
-              Set up your AI voice assistant in three simple steps. No
-              engineering required.
-            </p>
-          </div>
-          <PixelButton href="#demo">See how it works</PixelButton>
-        </div>
+      {/* Desktop: the section pins and the single window swaps 01 -> 02 -> 03
+          as the tall track scrolls past. */}
+      <div className="hidden md:block">
+        <div ref={ref} className={reduced ? "relative" : "relative h-[300vh]"}>
+          <div
+            className={
+              reduced
+                ? "py-24"
+                : "sticky top-0 flex min-h-screen items-center py-16"
+            }
+          >
+            <div className="mx-auto w-full max-w-[1200px] px-6">
+              <Header />
 
-        {/* Content */}
-        <div className="mt-16 grid items-center gap-12 md:grid-cols-2">
-          {/* Steps. The rail sits left of the circles and the active marker sits
-              *on* it, so there is one line rather than two parallel ones. */}
-          <ol className="relative flex flex-col gap-8 pl-10">
-            <span className="absolute bottom-3 left-0 top-3 w-px bg-line" />
-            {steps.map((s, i) => {
-              const on = i === active;
-              return (
-                <li key={s.n} className="relative">
-                  {on && (
-                    <span className="absolute -left-10 top-0 h-full w-[2px] bg-ink" />
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => setActive(i)}
-                    aria-current={on}
-                    className="flex w-full items-start gap-4 text-left"
-                  >
+              <div className="mt-16 grid items-center gap-12 md:grid-cols-2">
+                {/* Steps. The rail sits left of the circles and the active
+                    marker sits on it, so there is one line, not two. */}
+                <ol className="relative flex flex-col gap-8 pl-10">
+                  <span className="absolute bottom-3 left-0 top-3 w-px bg-line" />
+                  {steps.map((s, i) => {
+                    const on = i === active;
+                    return (
+                      <li key={s.n} className="relative">
+                        {on && (
+                          <span className="absolute -left-10 top-0 h-full w-[2px] bg-ink" />
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setActive(i)}
+                          aria-current={on}
+                          className="flex w-full items-start gap-4 text-left"
+                        >
+                          <span
+                            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-[12px] font-medium transition-colors ${
+                              on
+                                ? "border-ink bg-ink text-white"
+                                : "border-line bg-white text-ink"
+                            }`}
+                          >
+                            {s.n}
+                          </span>
+                          <span className="pt-0.5">
+                            <span
+                              className={`block text-[18px] font-semibold tracking-[-0.01em] transition-colors ${
+                                on ? "text-ink" : "text-ink/70"
+                              }`}
+                            >
+                              {s.title}
+                            </span>
+                            <span className="mt-1 block text-[15.5px] leading-[1.5] text-muted">
+                              {s.body}
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ol>
+
+                {/* Window mockup — shows the current step */}
+                <div>
+                  <div className="mb-3 flex h-px w-full bg-line">
                     <span
-                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-[12px] font-medium transition-colors ${
-                        on
-                          ? "border-ink bg-ink text-white"
-                          : "border-line bg-white text-ink"
-                      }`}
-                    >
-                      {s.n}
-                    </span>
-                    <span className="pt-0.5">
-                      <span
-                        className={`block text-[18px] font-semibold tracking-[-0.01em] transition-colors ${
-                          on ? "text-ink" : "text-ink/70"
-                        }`}
-                      >
-                        {s.title}
-                      </span>
-                      <span className="mt-1 block text-[15.5px] leading-[1.5] text-muted">
-                        {s.body}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ol>
-
-          {/* Window mockup — shows the current step */}
-          <div>
-            <div className="mb-3 flex h-px w-full bg-line">
-              <span
-                className="h-[2px] -translate-y-[0.5px] bg-ink transition-all duration-300"
-                style={{ width: `${((active + 1) / steps.length) * 100}%` }}
-              />
-            </div>
-            <div className="overflow-hidden rounded-[14px] border border-line bg-white shadow-[0_20px_60px_-30px_rgba(0,0,0,0.25)]">
-              <div className="flex items-center gap-2 border-b border-line/70 px-4 py-3">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#e0ded4]" />
-                <span className="h-2.5 w-2.5 rounded-full bg-[#e0ded4]" />
-                <span className="h-2.5 w-2.5 rounded-full bg-[#e0ded4]" />
-              </div>
-              <div className="aspect-[16/10] w-full bg-gradient-to-b from-[#fbfaf6] to-[#f3f1e9]">
-                <Panel />
+                      className="h-[2px] -translate-y-[0.5px] bg-ink transition-all duration-300"
+                      style={{
+                        width: `${((active + 1) / steps.length) * 100}%`,
+                      }}
+                    />
+                  </div>
+                  <WindowFrame>
+                    <Panel />
+                  </WindowFrame>
+                </div>
               </div>
             </div>
-          </div>
           </div>
         </div>
+      </div>
+
+      {/* Mobile: each step is followed by its own screen, revealed on scroll. */}
+      <div className="mx-auto max-w-[560px] px-6 py-20 md:hidden">
+        <Header />
+        <div className="mt-12 flex flex-col gap-12">
+          {steps.map((s) => {
+            const StepPanel = s.Panel;
+            return (
+              <div key={s.n} className="flex flex-col gap-5">
+                <div className="flex items-start gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-white text-[12px] font-medium text-ink">
+                    {s.n}
+                  </span>
+                  <span className="pt-0.5">
+                    <span className="block text-[18px] font-semibold tracking-[-0.01em] text-ink">
+                      {s.title}
+                    </span>
+                    <span className="mt-1 block text-[15.5px] leading-[1.5] text-muted">
+                      {s.body}
+                    </span>
+                  </span>
+                </div>
+                <Reveal>
+                  <WindowFrame>
+                    <StepPanel />
+                  </WindowFrame>
+                </Reveal>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
