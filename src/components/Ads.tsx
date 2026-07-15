@@ -86,7 +86,7 @@ function Badge({ cq }: { cq: boolean }) {
 
 export default function Ads() {
   return (
-    <section className="bg-cream py-[60px]">
+    <section className="bg-cream py-20">
       <div className="mx-auto max-w-[1200px] px-6">
         {/* Header */}
         <div className="mx-auto flex max-w-[885px] flex-col items-center gap-3 text-center">
@@ -94,7 +94,7 @@ export default function Ads() {
             Every lead called back in seconds.
           </h2>
           <p className="max-w-[760px] text-[16px] leading-[1.5] tracking-[-0.01em] text-[#666] sm:text-[18px]">
-            someone fills your form ,from Google Ads, Meta Ads, Google form or
+            Someone fills your form ,from Google Ads, Meta Ads, Google form or
             your website and before they close the tab, your assistant is
             already on the phone with them.
           </p>

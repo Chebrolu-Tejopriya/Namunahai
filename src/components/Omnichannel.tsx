@@ -55,7 +55,7 @@ function Whatsapp() {
 
 export default function Omnichannel() {
   return (
-    <section className="bg-cream py-[60px]">
+    <section className="bg-cream py-20">
       <div className="mx-auto grid max-w-[1200px] items-center gap-10 px-6 md:grid-cols-2">
         {/* Copy */}
         <div className="flex flex-col gap-3 text-center md:text-left">
