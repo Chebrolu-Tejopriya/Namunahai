@@ -277,9 +277,9 @@ function MockIndustry() {
 
 const langRows = [
   { offset: -34, items: ["Telugu", "Hindi", "Gujarti", "Marathi", "Tamil", "Bhojpuri"] },
-  { offset: -78, items: ["Odia", "Maithili", "Bengali", "Urdu", "Malayalam"] },
+  { offset: -78, items: ["Odia", "Maithili", "Bengali", "Urdu", "Malayalam", "Manipuri"] },
   { offset: -18, items: ["Punjabi", "Assamese", "Gondi", "Santali", "Kannada"] },
-  { offset: -62, items: ["Hindi", "Konkani", "Sindhi", "Kashmiri", "Nepali"] },
+  { offset: -62, items: ["Hindi", "Konkani", "Sindhi", "Kashmiri", "Nepali", "Marwari"] },
 ];
 
 function MockLanguages() {
