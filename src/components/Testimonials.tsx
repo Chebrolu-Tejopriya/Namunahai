@@ -65,7 +65,7 @@ export default function Testimonials() {
      whenever a tab is clicked, so a manual choice isn't overridden. */
   useEffect(() => {
     if (reduced) return;
-    const id = setTimeout(() => setActive((a) => (a + 1) % ITEMS.length), 5000);
+    const id = setTimeout(() => setActive((a) => (a + 1) % ITEMS.length), 2500);
     return () => clearTimeout(id);
   }, [active, reduced]);
 
