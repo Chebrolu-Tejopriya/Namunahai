@@ -5,6 +5,7 @@ import Industries from "@/components/Industries";
 import Process from "@/components/Process";
 import Features from "@/components/Features";
 import Omnichannel from "@/components/Omnichannel";
+import Ads from "@/components/Ads";
 import Integrations from "@/components/Integrations";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
@@ -21,6 +22,7 @@ export default function Home() {
         <Process />
         <Features />
         <Omnichannel />
+        <Ads />
         <Integrations />
         <Testimonials />
         <CTA />
