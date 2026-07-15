@@ -72,15 +72,29 @@ export default function Omnichannel() {
         <div className="flex justify-center md:justify-end">
           <div className="relative aspect-[458/300] w-full max-w-[458px]">
             {/* connectors */}
+            {/* Each line leaves the badge from its own point along the bottom
+                edge and curves smoothly to a card, so they fan out cleanly
+                instead of colliding at one junction under the badge. */}
             <svg
               viewBox="0 0 458 300"
               fill="none"
               aria-hidden
               className="absolute inset-0 h-full w-full"
             >
-              <path d="M229 92 Q150 150 89 166" stroke="#c4c1b4" strokeWidth="1" />
-              <path d="M231 92 L231 176" stroke="#c4c1b4" strokeWidth="1" />
-              <path d="M229 92 Q308 150 379 166" stroke="#c4c1b4" strokeWidth="1" />
+              {[
+                "M214 89 C 196 122 120 140 89 164",
+                "M229 89 C 229 126 231 148 231 176",
+                "M244 89 C 262 122 348 140 379 164",
+              ].map((d) => (
+                <path
+                  key={d}
+                  d={d}
+                  stroke="#c4c1b4"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                />
+              ))}
             </svg>
 
             {/* namunah badge */}
